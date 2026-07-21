@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nurul Anam Chowdhury — Builder × Breaker × Founder</title>
+<meta name="description" content="Cinematic portfolio of Nurul Anam Chowdhury — full-stack developer, QA automation engineer, founder of CodeStorm-Hub. Flutter, Next.js, Supabase, Selenium.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500..900&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ tokens ============ */
+:root{
+  --ease:cubic-bezier(.65,.05,.36,1);
+}
+html[data-theme="dark"]{
+  --bg:#0A0E1A;
+  --bg-2:#0E1426;
+  --text:#F4F6FB;
+  --muted:#8B94A7;
+  --accent:#22C55E;
+  --accent-2:#38BDF8;
+  --line:rgba(244,246,251,.1);
+  --surface:rgba(255,255,255,.04);
+  --surface-border:rgba(255,255,255,.08);
+  --shadow:none;
+  color-scheme:dark;
+}
+html[data-theme="light"]{
+  --bg:#FAFAF7;
+  --bg-2:#F1F1EC;
+  --text:#101418;
+  --muted:#5A6472;
+  --accent:#15803D;
+  --accent-2:#0369A1;
+  --line:rgba(16,20,24,.12);
+  --surface:#FFFFFF;
+  --surface-border:rgba(16,20,24,.08);
+  --shadow:0 10px 34px -14px rgba(16,20,24,.14);
+  color-scheme:light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  font-size:17px;line-height:1.65;
+  overflow-x:hidden;
+  transition:background .45s var(--ease),color .45s var(--ease);
+}
+h1,h2,h3{font-family:'Archivo',system-ui,sans-serif;font-stretch:125%;line-height:1.02;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--accent);color:var(--bg)}
+.mono{font-family:'JetBrains Mono',monospace}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* ============ particle canvas ============ */
+#storm{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ============ custom cursor ============ */
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;z-index:9999;pointer-events:none;border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+.cursor-dot{width:7px;height:7px;background:var(--accent)}
+.cursor-ring{
+  width:34px;height:34px;border:1.5px solid var(--accent);opacity:.55;
+  transition:width .25s,height .25s,opacity .25s;
+}
+.cursor-ring.big{width:64px;height:64px;opacity:.9}
+@media (hover:none),(pointer:coarse){.cursor-dot,.cursor-ring{display:none}}
+
+/* ============ nav ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px clamp(20px,4vw,48px);
+  mix-blend-mode:normal;
+}
+.logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1rem;letter-spacing:.02em}
+.logo .g{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-right .nlink{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted);transition:color .2s;cursor:pointer}
+.nav-right .nlink:hover{color:var(--accent)}
+#themeToggle{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+  transition:border-color .25s,transform .4s var(--ease);
+}
+#themeToggle:hover{border-color:var(--accent);transform:rotate(40deg)}
+#themeToggle svg{width:19px;height:19px}
+html[data-theme="dark"] .icon-sun{display:block}
+html[data-theme="dark"] .icon-moon{display:none}
+html[data-theme="light"] .icon-sun{display:none}
+html[data-theme="light"] .icon-moon{display:block}
+
+/* ============ layout helpers ============ */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,48px);position:relative;z-index:2}
+section{position:relative;z-index:2}
+.klabel{
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:18px;
+}
+
+/* ============ hero ============ */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:70px}
+#hero .status{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:26px;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);letter-spacing:.06em;
+}
+#hero .status .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.h-name{
+  font-size:clamp(2rem,9vw,7.6rem);font-weight:900;text-transform:uppercase;
+  display:block;
+}
+.h-name .ln{display:block;overflow:hidden}
+@media (max-width:400px){
+  .h-name{font-size:clamp(1.6rem,8.8vw,7.6rem)}
+}
+.h-name .ch{display:inline-block;will-change:transform}
+.h-name .thin{color:transparent;-webkit-text-stroke:1.5px var(--text)}
+.h-sub{
+  margin-top:28px;font-family:'JetBrains Mono',monospace;
+  font-size:clamp(.85rem,1.6vw,1.05rem);color:var(--muted);letter-spacing:.04em;
+}
+.h-sub .x{color:var(--accent);padding:0 6px}
+.h-desc{max-width:560px;margin-top:22px;color:var(--muted);font-size:1.02rem}
+.h-desc strong{color:var(--text);font-weight:600}
+.hero-cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
+.mbtn{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:15px 30px;border-radius:999px;font-weight:600;font-size:.95rem;cursor:pointer;
+  border:1.5px solid var(--accent);color:var(--text);
+  transition:background .25s,color .25s;will-change:transform;
+}
+.mbtn.fill{background:var(--accent);color:var(--bg)}
+.mbtn.fill:hover{filter:brightness(1.12)}
+.mbtn.ghost:hover{background:var(--accent);color:var(--bg)}
+.mbtn svg{width:18px;height:18px}
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.3em;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.scroll-hint::after{
+  content:"";width:1px;height:44px;background:linear-gradient(var(--accent),transparent);
+  animation:drip 1.8s infinite var(--ease);
+}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ============ proof strip ============ */
+#proof{padding-top:90px;padding-bottom:90px}
+.proof-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:32px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:44px 0;
+}
+.pstat .n{
+  font-family:'Archivo';font-stretch:125%;font-weight:900;
+  font-size:clamp(2.4rem,5vw,4rem);color:var(--accent);line-height:1;
+}
+.pstat .l{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:10px}
+
+/* ============ work grid ============ */
+#work{padding-top:130px;padding-bottom:90px}
+#workTitle h2{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;text-transform:uppercase;margin-bottom:50px}
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.wcard{
+  position:relative;padding:48px 40px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  transition:background .3s var(--ease);
+}
+.wcard:hover{background:var(--bg-2)}
+.wcard .bgnum{
+  position:absolute;top:24px;right:32px;
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.2em;color:var(--muted);
+}
+.wcard .idx{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.8rem;letter-spacing:.2em;display:block;margin-bottom:14px}
+.wcard h3{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;text-transform:uppercase;margin-bottom:14px}
+.wcard .hook{font-size:.98rem;color:var(--muted);margin-bottom:22px}
+.wcard .hook strong{color:var(--text)}
+.tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.tags span{
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.06em;
+  padding:6px 13px;border:1px solid var(--line);border-radius:999px;color:var(--muted);
+}
+.plink{
+  display:inline-flex;align-items:center;gap:9px;font-weight:600;color:var(--accent);
+  font-size:.92rem;cursor:pointer;
+}
+.plink .ul{position:relative}
+.plink .ul::after{
+  content:"";position:absolute;left:0;bottom:-3px;height:1.5px;width:100%;
+  background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease);
+}
+.plink:hover .ul::after{transform:scaleX(1);transform-origin:left}
+.plink svg{width:16px;height:16px;transition:transform .3s}
+.plink:hover svg{transform:translate(3px,-3px)}
+
+/* ============ case studies ============ */
+#cases{padding-top:110px;padding-bottom:110px}
+.case{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,80px);
+  padding:64px 0;border-top:1px solid var(--line);align-items:start;
+}
+.case:last-child{border-bottom:1px solid var(--line)}
+.case .meta .cnum{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);letter-spacing:.25em}
+.case .meta h3{font-size:clamp(1.7rem,3.4vw,2.6rem);font-weight:800;margin:10px 0 14px;text-transform:uppercase}
+.case .meta .stack{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--muted);line-height:2}
+.case .body p{color:var(--muted);margin-bottom:14px}
+.case .body p b{color:var(--text);font-weight:600;font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:2px}
+.case .status-badge{
+  display:inline-flex;align-items:center;gap:8px;margin-top:8px;
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--accent);
+}
+.case .status-badge svg{width:14px;height:14px}
+
+/* ============ codestorm ============ */
+#org{padding:130px 0;text-align:center;position:relative;overflow:hidden}
+#org h2{font-size:clamp(2.4rem,7vw,5.4rem);font-weight:900;text-transform:uppercase;margin-bottom:24px}
+#org h2 .g{color:var(--accent)}
+#org p{max-width:640px;margin:0 auto 18px;color:var(--muted);font-size:1.05rem}
+#org p strong{color:var(--text)}
+.org-tags{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:30px}
+.org-tags span{font-family:'JetBrains Mono',monospace;font-size:.74rem;padding:7px 14px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+
+/* ============ timeline ============ */
+#journey{padding-top:110px;padding-bottom:110px}
+.rails{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,70px);margin-top:50px}
+.rail h3{
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;margin-bottom:30px;
+}
+.rail .track{position:relative;padding-left:26px}
+.rail .line{
+  position:absolute;left:0;top:4px;bottom:4px;width:2px;background:var(--line);overflow:hidden;
+}
+.rail .line i{
+  position:absolute;inset:0;background:var(--accent);display:block;
+  transform:scaleY(0);transform-origin:top;
+}
+.tnode{position:relative;padding-bottom:34px}
+.tnode:last-child{padding-bottom:0}
+.tnode::before{
+  content:"";position:absolute;left:-31px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--bg);border:2.5px solid var(--accent);
+}
+.tnode .when{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--accent);letter-spacing:.14em}
+.tnode .role{font-family:'Archivo';font-stretch:125%;font-weight:700;font-size:1.06rem;margin:4px 0 2px}
+.tnode .org-n{color:var(--muted);font-size:.88rem;line-height:1.6}
+.tnode .org-n strong{color:var(--text);font-weight:600}
+
+/* ============ skills ============ */
+#skills{padding-top:20px;padding-bottom:110px}
+.skill-rows{margin-top:40px;border-top:1px solid var(--line)}
+.srow{
+  display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:baseline;
+  padding:26px 0;border-bottom:1px solid var(--line);
+}
+.srow .sname{font-family:'Archivo';font-stretch:125%;font-weight:800;font-size:1.15rem;text-transform:uppercase}
+.srow .sitems{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--muted);line-height:2.1}
+
+/* ============ contact ============ */
+#contact{padding-top:150px;padding-bottom:90px;text-align:center}
+#contact h2{font-size:clamp(2.2rem,6.5vw,5rem);font-weight:900;text-transform:uppercase;margin-bottom:22px}
+#contact h2 .g{color:var(--accent)}
+#contact p{color:var(--muted);max-width:520px;margin:0 auto 40px}
+.socials{display:flex;justify-content:center;gap:14px;margin-top:44px}
+.socials a{
+  width:50px;height:50px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);
+  transition:color .25s,border-color .25s,transform .25s;cursor:pointer;
+}
+.socials a:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-4px)}
+.socials svg{width:20px;height:20px}
+footer{
+  padding:30px 0 40px;text-align:center;color:var(--muted);
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.12em;position:relative;z-index:2;
+}
+
+/* ============ responsive ============ */
+@media (max-width:880px){
+  .proof-grid{grid-template-columns:repeat(2,1fr)}
+  .case{grid-template-columns:1fr}
+  .rails{grid-template-columns:1fr;gap:54px}
+  .srow{grid-template-columns:1fr;gap:6px}
+  .work-grid{grid-template-columns:1fr}
+}
+
+/* ============ reduced motion ============ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .cursor-dot,.cursor-ring{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="storm" aria-hidden="true"></canvas>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<nav>
+  <a class="logo" href="#hero">anam<span class="g">.</span>dev</a>
+  <div class="nav-right">
+    <a class="nlink" href="#work">work</a>
+    <a class="nlink" href="#journey">journey</a>
+    <a class="nlink" href="#contact">contact</a>
+    <button id="themeToggle" aria-label="Toggle color theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="wrap">
+  <span class="status"><span class="dot"></span>AVAILABLE FOR WORK — DHAKA, BD</span>
+  <h1 class="h-name" aria-label="Nurul Anam Chowdhury">
+    <span class="ln" data-split>Nurul</span>
+    <span class="ln thin" data-split>Anam</span>
+    <span class="ln" data-split>Chowdhury</span>
+  </h1>
+  <p class="h-sub" id="typeline"><span class="x">&gt;</span><span id="typed"></span><span class="x" id="caret">_</span></p>
+  <p class="h-desc">Full-stack developer and QA automation engineer. I ship cross-platform products with <strong>Flutter</strong> and <strong>Next.js</strong> — then break them before users can. Founder of <strong>CodeStorm-Hub</strong>.</p>
+  <div class="hero-cta">
+    <a class="mbtn fill" data-magnetic href="#work">
+      Enter the storm
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+    </a>
+    <a class="mbtn ghost" data-magnetic href="https://github.com/afsan123" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+      GitHub
+    </a>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<!-- PROOF -->
+<section id="proof" class="wrap">
+  <div class="proof-grid">
+    <div class="pstat"><div class="n" data-count="89">0</div><div class="l">Repositories</div></div>
+    <div class="pstat"><div class="n" data-count="6">0</div><div class="l">Products shipping</div></div>
+    <div class="pstat"><div class="n" data-count="3">0</div><div class="l">GitHub orgs</div></div>
+    <div class="pstat"><div class="n" data-count="5">0</div><div class="l">Years experience</div></div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work" class="wrap">
+  <div id="workTitle">
+    <span class="klabel">Featured work</span>
+    <h2>Five products,<br>one storm</h2>
+  </div>
+  <div class="work-grid">
+
+    <article class="wcard" data-reveal>
+      <div class="bgnum">01</div>
+      <span class="idx">FINTECH · RENTAL</span>
+      <h3>GadgetChai</h3>
+      <p class="hook">Device-as-a-Service for Bangladesh. <strong>AI e-KYC</strong> — NID OCR plus facial recognition — gates every rental; <strong>bKash tokenized billing</strong> charges monthly, automatically.</p>
+      <div class="tags"><span>Flutter</span><span>Supabase</span><span>FastAPI</span><span>EasyOCR</span><span>DeepFace</span></div>
+      <a class="plink" href="https://github.com/CodeStorm-Hub/GadgetChai" target="_blank" rel="noopener"><span class="ul">View repository</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </article>
+
+    <article class="wcard" data-reveal>
+      <div class="bgnum">02</div>
+      <span class="idx">MOBILE · ML</span>
+      <h3>Awaken</h3>
+      <p class="hook">Alarm you cannot snooze. Dismiss only after <strong>camera-verified squats</strong> — ML Kit pose detection counts every rep. GPS territory capture turns runs into conquest.</p>
+      <div class="tags"><span>Flutter</span><span>ML Kit</span><span>Supabase</span><span>Google Maps</span></div>
+      <a class="plink" href="https://github.com/CodeStorm-Hub/awaken" target="_blank" rel="noopener"><span class="ul">View repository</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </article>
+
+    <article class="wcard" data-reveal>
+      <div class="bgnum">03</div>
+      <span class="idx">SAAS · E-COMMERCE</span>
+      <h3>StormCom</h3>
+      <p class="hook">Multi-tenant e-commerce SaaS — stores, orders, inventory, CRM, marketing in one dashboard. <strong>42-model schema</strong>, MFA/SSO, Stripe + bKash + SSLCOMMERZ.</p>
+      <div class="tags"><span>Next.js 16</span><span>React 19</span><span>Prisma</span><span>PostgreSQL</span><span>Playwright</span></div>
+      <a class="plink" href="https://github.com/CodeStorm-Hub/StormCom" target="_blank" rel="noopener"><span class="ul">View repository</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </article>
+
+    <article class="wcard" data-reveal>
+      <div class="bgnum">04</div>
+      <span class="idx">SOCIAL COMMERCE</span>
+      <h3>PetFolio</h3>
+      <p class="hook">Social-commerce for pet owners — Instagram-style feed, <strong>Tinder-style pet matching</strong>, health tracking, marketplace. 260+ commits and counting.</p>
+      <div class="tags"><span>Flutter</span><span>Supabase</span><span>Stripe</span><span>Material 3</span></div>
+      <a class="plink" href="https://github.com/CodeStorm-Hub/petfolio" target="_blank" rel="noopener"><span class="ul">View repository</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </article>
+
+    <article class="wcard" data-reveal>
+      <div class="bgnum">05</div>
+      <span class="idx">DEVTOOLS · AI</span>
+      <h3>FreeLLMAPI</h3>
+      <p class="hook">One endpoint, <strong>16 LLM providers</strong>, ~1.7B free tokens a month. OpenAI-compatible proxy with smart routing, automatic failover, AES-256 encrypted keys.</p>
+      <div class="tags"><span>Node.js</span><span>TypeScript</span><span>Express</span><span>Docker</span><span>React</span></div>
+      <a class="plink" href="https://github.com/CodeStorm-Hub/freellmapi" target="_blank" rel="noopener"><span class="ul">View repository</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+    </article>
+
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section id="cases" class="wrap">
+  <span class="klabel">Under the hood</span>
+  <h2 style="font-size:clamp(2rem,5vw,3.6rem);font-weight:800;text-transform:uppercase;margin-bottom:40px">How they're built</h2>
+
+  <div class="case" data-reveal>
+    <div class="meta">
+      <span class="cnum">01 — GADGETCHAI</span>
+      <h3>Trust as a feature</h3>
+      <div class="stack mono">Flutter · Supabase Edge Functions · FastAPI · bKash API</div>
+    </div>
+    <div class="body">
+      <p><b>Problem</b>Renting electronics in Bangladesh means fraud risk on both sides — no identity rails, no recurring payment culture.</p>
+      <p><b>Built</b>Separate ML microservice for e-KYC: EasyOCR reads national ID cards, DeepFace matches selfie to document. bKash tokenization handles subscription billing without stored card data.</p>
+      <div class="status-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>SHIPPING — ANDROID + WEB</div>
+    </div>
+  </div>
+
+  <div class="case" data-reveal>
+    <div class="meta">
+      <span class="cnum">02 — AWAKEN</span>
+      <h3>Hardware-honest fitness</h3>
+      <div class="stack mono">Flutter · ML Kit · Supabase · offline-first sync</div>
+    </div>
+    <div class="body">
+      <p><b>Problem</b>Every alarm app loses to the snooze button. Motivation isn't a UI problem — it's an enforcement problem.</p>
+      <p><b>Built</b>On-device pose detection validates squat depth and count before the alarm dies. Workout log syncs offline-first; territory mode maps GPS runs into captured polygons with leaderboards.</p>
+      <div class="status-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>ACTIVE DEVELOPMENT</div>
+    </div>
+  </div>
+
+  <div class="case" data-reveal>
+    <div class="meta">
+      <span class="cnum">03 — STORMCOM</span>
+      <h3>SaaS done spec-first</h3>
+      <div class="stack mono">Next.js 16 · Prisma · PostgreSQL · NextAuth · Vitest · Playwright</div>
+    </div>
+    <div class="body">
+      <p><b>Problem</b>Multi-tenant commerce fails at the edges: tenant isolation, payment localization, role sprawl.</p>
+      <p><b>Built</b>1,000+ line feature spec and 42-model schema before code. Automatic tenant scoping at the ORM layer, TOTP MFA, three payment rails (Stripe, bKash, SSLCOMMERZ), E2E coverage in Playwright from day one.</p>
+      <div class="status-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>PHASE 2 — FOUNDATION</div>
+    </div>
+  </div>
+
+  <div class="case" data-reveal>
+    <div class="meta">
+      <span class="cnum">04 — FREELLMAPI</span>
+      <h3>Infrastructure from thrift</h3>
+      <div class="stack mono">Node.js · TypeScript · SQLite · Docker multi-arch</div>
+    </div>
+    <div class="body">
+      <p><b>Problem</b>Sixteen LLM free tiers, sixteen SDKs, sixteen rate limiters. Nobody uses them because juggling them costs more than paying.</p>
+      <p><b>Built</b>OpenAI-compatible proxy with per-key RPM/RPD/TPM/TPD tracking, family-based model routing, automatic failover mid-conversation, AES-256-GCM key storage, admin analytics dashboard.</p>
+      <div class="status-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>SHIPPING — DOCKER + DESKTOP</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORG -->
+<section id="org">
+  <div class="wrap">
+    <span class="klabel">Founder</span>
+    <h2>Code<span class="g">Storm</span>-Hub</h2>
+    <p>A community-driven open-source organization in Bangladesh. <strong>89 repositories</strong> across SaaS platforms, mobile apps, MCP plugins for AI agents, client work, and QA automation suites — built with a team of engineers, designers, and analysts I lead.</p>
+    <div class="org-tags">
+      <span>team leadership</span><span>code review</span><span>CI/CD</span><span>MCP servers</span><span>agentic workflows</span><span>open source</span>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey" class="wrap">
+  <span class="klabel">Journey</span>
+  <h2 style="font-size:clamp(2rem,5vw,3.6rem);font-weight:800;text-transform:uppercase">Two tracks,<br>one direction</h2>
+  <div class="rails">
+    <div class="rail">
+      <h3>// Engineering</h3>
+      <div class="track">
+        <div class="line"><i></i></div>
+        <div class="tnode" data-reveal>
+          <div class="when">2025 — PRESENT</div>
+          <div class="role">Founder &amp; Lead Developer</div>
+          <div class="org-n">CodeStorm-Hub — 6 products shipping across Flutter and Next.js</div>
+        </div>
+        <div class="tnode" data-reveal>
+          <div class="when">JUN — SEP 2024</div>
+          <div class="role">Automation Tester, Intern</div>
+          <div class="org-n">A1QA — Java, Selenium, TestNG, Postman, API testing</div>
+        </div>
+        <div class="tnode" data-reveal>
+          <div class="when">MAR — MAY 2024</div>
+          <div class="role">Flutter Developer, Intern</div>
+          <div class="org-n">Hilinkz — Flutter UI, REST integration, code reviews</div>
+        </div>
+        <div class="tnode" data-reveal>
+          <div class="when">2017 — 2023</div>
+          <div class="role">BSc, Computer Science &amp; Engineering</div>
+          <div class="org-n">North South University, Dhaka</div>
+        </div>
+      </div>
+    </div>
+    <div class="rail">
+      <h3>// Leadership</h3>
+      <div class="track">
+        <div class="line"><i></i></div>
+        <div class="tnode" data-reveal>
+          <div class="when">2024 — PRESENT</div>
+          <div class="role">Project Manager &amp; Lead Gen Specialist</div>
+          <div class="org-n">SalesMaestro, Ontario — 15+ concurrent projects, team of 8. Built LinkedIn Sales Navigator + Apollo.io outreach system, <strong>+40% qualified leads</strong> in one fiscal year. Salesforce lead scoring automation cut manual data entry <strong>30 hrs/week</strong>; funnel analysis drove <strong>+15% lead-to-customer conversion</strong>.</div>
+        </div>
+        <div class="tnode" data-reveal>
+          <div class="when">2021 — 2023</div>
+          <div class="role">Technical Project Coordinator</div>
+          <div class="org-n">SalesMaestro, Ontario — Python + Power BI dashboards for real-time project &amp; lead-gen KPIs. Led legacy lead-management migration to HubSpot, <strong>-50% lead response time</strong>.</div>
+        </div>
+        <div class="tnode" data-reveal>
+          <div class="when">2019 — 2020</div>
+          <div class="role">Sales Representative</div>
+          <div class="org-n">Synergy Finance, Dhaka — outbound B2B lending sales to small business owners. Managed full prospect pipeline, <strong>consistently beat monthly targets</strong>, built repeat-client relationships.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="wrap">
+  <span class="klabel">Toolbox</span>
+  <div class="skill-rows">
+    <div class="srow" data-reveal><div class="sname">Mobile</div><div class="sitems">Flutter · Dart · GetX · Provider · Dio · Firebase · Material 3</div></div>
+    <div class="srow" data-reveal><div class="sname">Web</div><div class="sitems">Next.js · React · TypeScript · Tailwind CSS · shadcn/ui · Prisma</div></div>
+    <div class="srow" data-reveal><div class="sname">QA</div><div class="sitems">Selenium · TestNG · Postman · Playwright · API testing · test design</div></div>
+    <div class="srow" data-reveal><div class="sname">Backend</div><div class="sitems">Supabase · PostgreSQL · Node.js · Express · FastAPI · Django · MySQL</div></div>
+    <div class="srow" data-reveal><div class="sname">Sales &amp; Growth</div><div class="sitems">Salesforce · HubSpot · Zoho CRM · LinkedIn Sales Navigator · Apollo.io · Zapier · Pardot</div></div>
+    <div class="srow" data-reveal><div class="sname">AI &amp; Ops</div><div class="sitems">Claude Code · MCP servers · LLM APIs · Docker · GitHub Actions · Vercel · Power BI</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="wrap">
+  <span class="klabel">Contact</span>
+  <h2>Let's build something<br>that <span class="g">survives testing</span></h2>
+  <p>Open to full-stack, mobile, and QA roles — or a product you want shipped properly. Email is fastest.</p>
+  <a class="mbtn fill" data-magnetic href="mailto:anamchowdhury5@outlook.com">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    anamchowdhury5@outlook.com
+  </a>
+  <div class="socials">
+    <a href="https://github.com/afsan123" target="_blank" rel="noopener" aria-label="GitHub profile">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/nurulanam-chowdhury" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>© 2026 NURUL ANAM CHOWDHURY — BUILT IN THE STORM, DHAKA</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = matchMedia('(max-width: 768px)').matches;
+
+/* ---------- theme ---------- */
+const root = document.documentElement;
+const saved = localStorage.getItem('theme');
+if (saved) root.dataset.theme = saved;
+else root.dataset.theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+document.getElementById('themeToggle').addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', root.dataset.theme);
+});
+
+/* ---------- 3D particle storm (Three.js) ---------- */
+(() => { try {
+  const cv = document.getElementById('storm');
+  if (!window.THREE) { cv.style.display = 'none'; return; }
+  const N = reduced ? 700 : (isMobile ? 650 : 1600);
+  const css = k => getComputedStyle(root).getPropertyValue(k).trim();
+  const hex = c => new THREE.Color(c);
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: cv, alpha: true, antialias: true, powerPreference: 'high-performance' });
+  } catch (e) { cv.style.display = 'none'; return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(56, innerWidth / innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 6.4);
+
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // soft round sprite texture
+  const tc = document.createElement('canvas'); tc.width = tc.height = 64;
+  const tctx = tc.getContext('2d');
+  const grad = tctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(.4, 'rgba(255,255,255,.7)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  tctx.fillStyle = grad; tctx.fillRect(0, 0, 64, 64);
+  const dotTex = new THREE.CanvasTexture(tc);
+
+  // base "storm" cloud positions
+  const base = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const r = 3.2 + Math.random() * 3.4;
+    const th = Math.random() * Math.PI * 2, ph = Math.acos(Math.random() * 2 - 1);
+    base[i * 3] = r * Math.sin(ph) * Math.cos(th) * 1.15;
+    base[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th) * .68;
+    base[i * 3 + 2] = r * Math.cos(ph) * .6 - 1.5;
+  }
+  // "vortex" target positions sampled off a torus-knot
+  const knot = new THREE.TorusKnotGeometry(1.7, 0.55, 220, 20);
+  const kpos = knot.attributes.position.array;
+  const kCount = kpos.length / 3;
+  const target = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const k = (i % kCount) * 3;
+    const jitter = () => (Math.random() - .5) * 0.12;
+    target[i * 3] = kpos[k] + jitter();
+    target[i * 3 + 1] = kpos[k + 1] + jitter();
+    target[i * 3 + 2] = kpos[k + 2] + jitter();
+  }
+  knot.dispose();
+
+  const positions = new Float32Array(base);
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  const mat = new THREE.PointsMaterial({
+    size: isMobile ? 0.075 : 0.06,
+    map: dotTex,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    color: hex(css('--accent') || '#22C55E'),
+    opacity: root.dataset.theme === 'dark' ? .85 : .65,
+    sizeAttenuation: true
+  });
+  const points = new THREE.Points(geo, mat);
+  group.add(points);
+
+  function applyTheme() {
+    mat.color = hex(css('--accent') || '#22C55E');
+    mat.opacity = root.dataset.theme === 'dark' ? .85 : .65;
+  }
+  new MutationObserver(applyTheme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+  function resize() {
+    renderer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+  }
+  resize(); addEventListener('resize', resize);
+
+  const orgEl = document.getElementById('org');
+  const ndc = { x: 0, y: 0 };
+  addEventListener('pointermove', e => {
+    ndc.x = (e.clientX / innerWidth) * 2 - 1;
+    ndc.y = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
+
+  function morphAmount() {
+    if (!orgEl) return 0;
+    const r = orgEl.getBoundingClientRect();
+    const centerDist = Math.abs((r.top + r.bottom) / 2 - innerHeight / 2);
+    return Math.max(0, 1 - centerDist / (innerHeight * .85));
+  }
+
+  const clock = new THREE.Clock();
+  let raf = null, visible = true, camX = 0, camY = 0;
+
+  // NOTE: prefers-reduced-motion still gets a live scene — we only strip the
+  // vestibular-risky parts (turbulence jitter, cursor-driven camera swing) and
+  // slow the rotation way down. A fully frozen frame reads as "broken" to most
+  // users; ambient background drift is not the kind of motion that spec is for.
+  function tick() {
+    if (!visible) return;
+    const dt = Math.min(clock.getDelta(), .05);
+    const t = clock.elapsedTime;
+    const morph = morphAmount();
+    const arr = geo.attributes.position.array;
+    const turb = reduced ? 0 : (1 - morph) * .35;
+    for (let i = 0; i < N; i++) {
+      const i3 = i * 3;
+      const bx = base[i3], by = base[i3 + 1], bz = base[i3 + 2];
+      const tx = target[i3], ty = target[i3 + 1], tz = target[i3 + 2];
+      arr[i3] = bx + (tx - bx) * morph + Math.sin(t * .55 + i) * .06 * turb;
+      arr[i3 + 1] = by + (ty - by) * morph + Math.cos(t * .48 + i * 1.3) * .06 * turb;
+      arr[i3 + 2] = bz + (tz - bz) * morph + Math.sin(t * .44 + i * .7) * .06 * turb;
+    }
+    geo.attributes.position.needsUpdate = true;
+
+    // same pace everywhere (hero, reel, org, contact...) — one continuous fixed-canvas scene, not per-section
+    const spin = reduced ? .03 : .13;
+    group.rotation.y += dt * spin;
+    group.rotation.x = .35 * morph + (reduced ? 0 : Math.sin(t * .14) * .12);
+    group.rotation.z = .18 * morph + (reduced ? 0 : Math.cos(t * .1) * .06);
+
+    camX += ((reduced ? 0 : ndc.x * .5) - camX) * .06;
+    camY += ((reduced ? 0 : -ndc.y * .35) - camY) * .06;
+    camera.position.x = camX; camera.position.y = camY;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+    raf = requestAnimationFrame(tick);
+  }
+  tick();
+  document.addEventListener('visibilitychange', () => {
+    visible = !document.hidden;
+    if (visible && !raf) tick(); else if (!visible && raf) { cancelAnimationFrame(raf); raf = null; }
+  });
+} catch (e) {
+  console.error('3D storm init failed, hiding canvas', e);
+  const cv2 = document.getElementById('storm');
+  if (cv2) cv2.style.display = 'none';
+} })();
+
+/* ---------- custom cursor ---------- */
+(() => {
+  if (reduced || matchMedia('(hover:none)').matches) return;
+  const dot = document.querySelector('.cursor-dot'), ring = document.querySelector('.cursor-ring');
+  let rx = 0, ry = 0, tx = 0, ty = 0;
+  addEventListener('pointermove', e => {
+    tx = e.clientX; ty = e.clientY;
+    dot.style.left = tx + 'px'; dot.style.top = ty + 'px';
+  }, { passive: true });
+  (function lerp() {
+    rx += (tx - rx) * .16; ry += (ty - ry) * .16;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(lerp);
+  })();
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('pointerenter', () => ring.classList.add('big'));
+    el.addEventListener('pointerleave', () => ring.classList.remove('big'));
+  });
+})();
+
+/* ---------- magnetic buttons ---------- */
+if (!reduced && !matchMedia('(hover:none)').matches) {
+  document.querySelectorAll('[data-magnetic]').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${x * .22}px, ${y * .22}px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+  });
+}
+
+/* ---------- typed line ---------- */
+(() => {
+  const phrases = ['builder × breaker × founder', 'flutter · next.js · supabase', 'ship it. then try to break it.'];
+  const t = document.getElementById('typed');
+  if (reduced) { t.textContent = phrases[0]; document.getElementById('caret').style.display = 'none'; return; }
+  let pi = 0, ci = 0, del = false;
+  (function tick() {
+    const p = phrases[pi];
+    t.textContent = p.slice(0, ci);
+    if (!del && ci < p.length) { ci++; setTimeout(tick, 55); }
+    else if (!del) { del = true; setTimeout(tick, 2200); }
+    else if (ci > 0) { ci--; setTimeout(tick, 22); }
+    else { del = false; pi = (pi + 1) % phrases.length; setTimeout(tick, 350); }
+  })();
+})();
+
+/* ---------- GSAP scenes ---------- */
+if (window.gsap && !reduced) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // hero letters assemble
+  document.querySelectorAll('[data-split]').forEach(ln => {
+    ln.innerHTML = [...ln.textContent].map(c => `<span class="ch">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+  });
+  gsap.from('.h-name .ch', {
+    yPercent: 110, rotate: 6, duration: 1, ease: 'power4.out',
+    stagger: { each: .035, from: 'start' }, delay: .15
+  });
+  gsap.from('#hero .status, .h-sub, .h-desc, .hero-cta', { opacity: 0, y: 24, duration: .8, stagger: .12, delay: .7, ease: 'power3.out' });
+
+  // stats count up
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = +el.dataset.count;
+    ScrollTrigger.create({
+      trigger: el, start: 'top 88%', once: true,
+      onEnter: () => gsap.to(el, {
+        innerText: target, duration: 1.4, snap: { innerText: 1 }, ease: 'power2.out'
+      })
+    });
+  });
+  gsap.from('.proof-grid', { scaleX: .96, opacity: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: '#proof', start: 'top 85%' } });
+
+  // reveals
+  gsap.utils.toArray('[data-reveal]').forEach((el, i) => {
+    gsap.from(el, {
+      opacity: 0, y: 40, duration: .8, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true }
+    });
+  });
+
+  // timeline rail draw
+  document.querySelectorAll('.rail .line i').forEach(line => {
+    gsap.to(line, {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: line.closest('.track'), start: 'top 80%', end: 'bottom 55%', scrub: .6 }
+    });
+  });
+
+  // org section pop
+  gsap.from('#org h2, #org p, .org-tags', {
+    opacity: 0, y: 34, stagger: .12, duration: .8, ease: 'power3.out',
+    scrollTrigger: { trigger: '#org', start: 'top 75%', once: true }
+  });
+
+  // contact
+  gsap.from('#contact h2, #contact p, #contact .mbtn, .socials', {
+    opacity: 0, y: 30, stagger: .1, duration: .8, ease: 'power3.out',
+    scrollTrigger: { trigger: '#contact', start: 'top 78%', once: true }
+  });
+} else {
+  // no-motion: make sure counters show final values
+  document.querySelectorAll('[data-count]').forEach(el => el.textContent = el.dataset.count);
+}
+</script>
+</body>
+</html>
